@@ -1,6 +1,7 @@
 {
   "name": "Lesson-One",
   "version": "1.0.0",
+  "description": "Genius Courses Fullstack NodeJS",
   "main": "server.js",
   "author": "PgkSoft",
   "license": "MIT",
