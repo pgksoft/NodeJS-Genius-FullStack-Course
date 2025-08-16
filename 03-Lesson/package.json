@@ -1,0 +1,25 @@
+{
+  "name": "Third-Lesson",
+  "version": "1.0.0",
+  "description": "Genius Courses Fullstack NodeJS - TS + Express & SQLite",
+  "main": "server.ts",
+  "author": "PgkSoft",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "dev": "ts-node-dev src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2"
+  }
+}
