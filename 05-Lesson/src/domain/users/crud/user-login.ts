@@ -22,7 +22,7 @@ export async function userLogin(
       return getCrudResultError(400, MONGODB_TITLE.invalidLogin)
     }
     const { password, ...userData } = document
-    return getCrudResultSuccess(201, userData)
+    return getCrudResultSuccess(userData, 201)
   } catch (e) {
     return analyzeMongoError(e)
   }

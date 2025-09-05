@@ -21,7 +21,7 @@ export async function userRegister(
     })
     const { password, ...userData } = document.toObject()
 
-    return getCrudResultSuccess(201, userData)
+    return getCrudResultSuccess(userData, 201)
   } catch (e) {
     return analyzeMongoError(e)
   }

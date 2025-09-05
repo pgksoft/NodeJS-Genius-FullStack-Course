@@ -14,7 +14,7 @@ export async function taskRemove(
     if (!task) {
       return getCrudResultError(404)
     }
-    return getCrudResultSuccess(204, task)
+    return getCrudResultSuccess(task, 204)
   } catch (e) {
     return analyzeMongoError(e)
   }

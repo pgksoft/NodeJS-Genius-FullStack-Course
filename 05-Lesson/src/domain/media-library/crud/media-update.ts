@@ -1,25 +1,25 @@
 import { Types } from 'mongoose'
-import { TaskModel, TTask, TTaskDto } from '../model'
 import TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result'
 import { analyzeMongoError } from '../../../db/analyze-mongo-error'
 import {
   getCrudResultError,
   getCrudResultSuccess,
 } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result'
+import { MediaModel, TMedia, TMediaDto } from '../model'
 
-export async function taskUpdate(
+export async function mediaUpdate(
   id: string,
-  taskDto: TTaskDto,
-): Promise<TEntityMutationResult<TTask>> {
+  mediaDto: TMediaDto,
+): Promise<TEntityMutationResult<TMedia>> {
   try {
-    const task = await TaskModel.findByIdAndUpdate(id, taskDto, {
+    const media = await MediaModel.findByIdAndUpdate(id, mediaDto, {
       new: true,
       runValidators: true,
     }).lean()
-    if (!task) {
+    if (!media) {
       return getCrudResultError(404)
     }
-    return getCrudResultSuccess(task)
+    return getCrudResultSuccess(media)
   } catch (e) {
     return analyzeMongoError(e)
   }

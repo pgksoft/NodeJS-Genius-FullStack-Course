@@ -12,7 +12,7 @@ export async function taskCreate(
       isCompleted: taskDto.isCompleted,
     })
     const task: TTask = document.toObject()
-    return getCrudResultSuccess(201, task)
+    return getCrudResultSuccess(task, 201)
   } catch (e) {
     return analyzeMongoError(e)
   }
