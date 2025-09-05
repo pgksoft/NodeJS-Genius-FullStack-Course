@@ -1,11 +1,11 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
 function getEnvVar(key: keyof NodeJS.ProcessEnv, required = true): string {
-  const value = process.env[key];
+  const value = process.env[key]
   if (required && !value) {
-    throw new Error(`❌ Missing required env variable: ${key}`);
+    throw new Error(`❌ Missing required env variable: ${key}`)
   }
-  return value!;
+  return value!
 }
 
 export const config = {
@@ -14,4 +14,5 @@ export const config = {
   dbName: getEnvVar('DB_NAME'),
   jwtSecret: getEnvVar('JWT_SECRET'),
   nodeEnv: process.env.NODE_ENV || 'development',
-};
+  multerDestination: getEnvVar('MULTER_DESTINATION'),
+}

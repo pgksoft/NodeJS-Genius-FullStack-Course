@@ -18,8 +18,8 @@ export const getCrudResultError = (
 }
 
 export const getCrudResultSuccess = <T>(
-  statusCode: number = 200,
   data: T,
+  statusCode: number = 200,
 ): TEntityMutationSuccess<T> => {
   return {
     isSuccess: true,

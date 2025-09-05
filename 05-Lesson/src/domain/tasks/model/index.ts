@@ -4,7 +4,7 @@ import TypeGuard from '../../../app-infrastructure/app-helpers/type-guard'
 import { TEntityRecord } from '../../../app-infrastructure/api/types/t-entity-data'
 
 export type TTask = {
-  text: string
+  text: String
   isCompleted?: boolean
 } & TEntityMember
 

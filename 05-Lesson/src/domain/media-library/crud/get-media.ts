@@ -4,15 +4,17 @@ import {
   getCrudResultSuccess,
 } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result'
 import { analyzeMongoError } from '../../../db/analyze-mongo-error'
-import { TaskModel, TTask } from '../model'
+import { MediaModel, TMedia } from '../model'
 
-export async function task(id: string): Promise<TEntityMutationResult<TTask>> {
+export async function getMedia(
+  id: string,
+): Promise<TEntityMutationResult<TMedia>> {
   try {
-    const task = await TaskModel.findById(id).lean()
-    if (!task) {
+    const media = await MediaModel.findById(id).lean()
+    if (!media) {
       return getCrudResultError(404)
     }
-    return getCrudResultSuccess(task)
+    return getCrudResultSuccess(media)
   } catch (e) {
     return analyzeMongoError(e)
   }

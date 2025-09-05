@@ -4,6 +4,8 @@
 /**/node_modules/
 /**/.pnp*
 
+# storage
+/**/uploads/
 
 # testing
 /**/coverage/
