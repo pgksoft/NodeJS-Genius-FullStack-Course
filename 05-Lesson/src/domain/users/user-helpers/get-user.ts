@@ -1,10 +1,10 @@
-import TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result'
+import TEntityMutationResult from '@api/types/t-entity-mutation-result'
 import {
   getCrudResultError,
   getCrudResultSuccess,
-} from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result'
-import { analyzeMongoError } from '../../../db/analyze-mongo-error'
-import { MONGODB_TITLE } from '../../../db/const/mongodb_title'
+} from '@helpers/send-mutation-result/crud-result'
+import { MONGODB_TITLE } from '@db/const/mongodb_title'
+import { analyzeMongoError } from '@db/analyze-mongo-error'
 import { TUserCrypt, UserModel } from '../model'
 
 export async function getUser(
