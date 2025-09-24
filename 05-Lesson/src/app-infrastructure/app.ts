@@ -1,10 +1,10 @@
-import express from 'express'
+import express, { Express } from 'express'
 import { applyMiddleware } from './middleware'
 import { applyRoutes } from './routes'
 
-const app = express()
-
-applyMiddleware(app)
-applyRoutes(app)
-
-export { app }
+export const createApp = (): Express => {
+  const app = express()
+  applyMiddleware(app)
+  applyRoutes(app)
+  return app
+}
