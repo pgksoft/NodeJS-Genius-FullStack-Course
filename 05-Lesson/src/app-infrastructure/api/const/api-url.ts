@@ -6,6 +6,6 @@ const apiUrl = {
   image: '/api/image',
   mediaLibrary: '/api/media-library',
   uploads: '/uploads',
-}
+};
 
-export default apiUrl
+export default apiUrl;

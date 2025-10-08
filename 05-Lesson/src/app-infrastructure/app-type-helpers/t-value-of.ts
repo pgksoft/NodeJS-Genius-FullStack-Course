@@ -1,3 +1,3 @@
-type TValueOf<T extends Object> = T[keyof T]
+type TValueOf<T extends Object> = T[keyof T];
 
-export default TValueOf
+export default TValueOf;

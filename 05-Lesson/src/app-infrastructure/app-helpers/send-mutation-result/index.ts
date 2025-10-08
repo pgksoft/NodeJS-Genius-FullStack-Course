@@ -1,14 +1,11 @@
-import { Response } from 'express'
-import TEntityMutationResult from '../../api/types/t-entity-mutation-result'
+import type { Response } from 'express';
+import type TEntityMutationResult from '../../api/types/t-entity-mutation-result';
 
-const sendMutationResult = <T>(
-  result: TEntityMutationResult<T>,
-  res: Response,
-) => {
+const sendMutationResult = <T>(result: TEntityMutationResult<T>, res: Response) => {
   if (result.isSuccess) {
-    return res.status(result.code).json(result.data)
+    return res.status(result.code).json(result.data);
   }
-  return res.status(result.code).json({ message: result.errorMessage })
-}
+  return res.status(result.code).json({ message: result.errorMessage });
+};
 
-export default sendMutationResult
+export default sendMutationResult;

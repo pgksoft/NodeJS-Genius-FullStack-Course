@@ -1,16 +1,15 @@
-import TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result'
-import { getCrudResultSuccess } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result'
-import { hashPlain } from '../../../app-infrastructure/crypt'
-import { analyzeMongoError } from '../../../db/analyze-mongo-error'
-import { TUserCrypt, TUserDto, UserModel } from '../model'
+import type TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result';
+import { getCrudResultSuccess } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
+import { hashPlain } from '../../../app-infrastructure/crypt';
+import { analyzeMongoError } from '../../../db/analyze-mongo-error';
+import type { TUserCrypt, TUserDto } from '../model';
+import { UserModel } from '../model';
 
-export async function userRegister(
-  taskDto: TUserDto,
-): Promise<TEntityMutationResult<TUserCrypt>> {
+export async function userRegister(taskDto: TUserDto): Promise<TEntityMutationResult<TUserCrypt>> {
   try {
-    const { firstName, lastName, email, role } = taskDto
+    const { firstName, lastName, email, role } = taskDto;
 
-    const hash = await hashPlain(taskDto.password)
+    const hash = await hashPlain(taskDto.password);
 
     const document = await UserModel.create({
       firstName,
@@ -18,11 +17,11 @@ export async function userRegister(
       email,
       password: hash,
       role,
-    })
-    const { password, ...userData } = document.toObject()
+    });
+    const { password, ...userData } = document.toObject();
 
-    return getCrudResultSuccess(userData, 201)
+    return getCrudResultSuccess(userData, 201);
   } catch (e) {
-    return analyzeMongoError(e)
+    return analyzeMongoError(e);
   }
 }

@@ -13,6 +13,6 @@ const APP_TITLE: Record<string, string> = {
   409: 'Entity record already exists',
   500: 'Internal Server Error',
   600: 'Invalid entity data from db',
-}
+};
 
-export default APP_TITLE
+export default APP_TITLE;

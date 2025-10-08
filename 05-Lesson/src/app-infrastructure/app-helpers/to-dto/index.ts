@@ -1,10 +1,10 @@
-export function toDto<T extends Record<string, any>, K extends keyof T>(
+export function toDto<T extends Record<string, unknown>, K extends keyof T>(
   entity: T,
   omitKeys: K[],
 ): Omit<T, K> {
-  const clone = { ...entity }
+  const clone = { ...entity };
   for (const key of omitKeys) {
-    delete clone[key]
+    delete clone[key];
   }
-  return clone
+  return clone;
 }

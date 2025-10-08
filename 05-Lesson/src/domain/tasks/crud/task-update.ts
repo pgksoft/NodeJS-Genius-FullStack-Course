@@ -1,11 +1,11 @@
-import { Types } from 'mongoose'
-import { TaskModel, TTask, TTaskDto } from '../model'
-import TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result'
-import { analyzeMongoError } from '../../../db/analyze-mongo-error'
+import type { TTask, TTaskDto } from '../model';
+import { TaskModel } from '../model';
+import type TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result';
+import { analyzeMongoError } from '../../../db/analyze-mongo-error';
 import {
   getCrudResultError,
   getCrudResultSuccess,
-} from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result'
+} from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
 
 export async function taskUpdate(
   id: string,
@@ -15,12 +15,12 @@ export async function taskUpdate(
     const task = await TaskModel.findByIdAndUpdate(id, taskDto, {
       new: true,
       runValidators: true,
-    }).lean()
+    }).lean();
     if (!task) {
-      return getCrudResultError(404)
+      return getCrudResultError(404);
     }
-    return getCrudResultSuccess(task)
+    return getCrudResultSuccess(task);
   } catch (e) {
-    return analyzeMongoError(e)
+    return analyzeMongoError(e);
   }
 }

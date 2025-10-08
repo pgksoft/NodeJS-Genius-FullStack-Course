@@ -15,7 +15,7 @@ describe('Task API', () => {
       .send({ text: 'New Task', isCompleted: false })
 
     expect(res.status).to.equal(201)
-    expect(res.body.text).to.equal('New Task')
+    expect(res.body.text).to.equal('New Task');
   })
 
   // READ (all)

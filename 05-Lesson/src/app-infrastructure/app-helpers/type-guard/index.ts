@@ -1,5 +1,5 @@
-type TypeGuard<T> = (value: unknown) => value is T
+type TypeGuard<T> = (value: unknown) => value is T;
 
-export default TypeGuard
+export default TypeGuard;
 
-export type TUnknownRecord = Record<string, unknown>
+export type TUnknownRecord = Record<string, unknown>;
