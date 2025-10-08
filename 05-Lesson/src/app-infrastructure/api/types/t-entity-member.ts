@@ -1,6 +1,6 @@
-import { Types } from 'mongoose'
+import type { Types } from 'mongoose';
 
 export type TEntityMember = {
-  _id: Types.ObjectId
-  __v?: number
-}
+  _id: Types.ObjectId;
+  __v?: number;
+};

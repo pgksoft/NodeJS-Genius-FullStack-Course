@@ -1,4 +1,4 @@
-const MONGO_DB = 'MongoDB'
+const MONGO_DB = 'MongoDB';
 
 export const MONGODB_TITLE = {
   connected: `✅ ${MONGO_DB} connected`,
@@ -14,4 +14,4 @@ export const MONGODB_TITLE = {
   userNotFound: 'User not found',
   invalidLogin: 'Invalid password or email',
   userInvalidPermissions: `User don't have permissions`,
-}
+};
