@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
-import { config } from '../app-infrastructure/app-config';
 import { MONGODB_TITLE } from './const/mongodb_title';
+import { logger } from '@logger/index';
+import { config } from 'settings-core/env';
 
 export async function connectToMongo() {
   await mongoose.connect(config.mongoUri, {
@@ -8,14 +9,14 @@ export async function connectToMongo() {
   });
 
   mongoose.connection.on('connected', () => {
-    console.log(MONGODB_TITLE.connected);
+    logger.info(MONGODB_TITLE.connected);
   });
 
   mongoose.connection.on('error', (err) => {
-    console.error(MONGODB_TITLE.error, err);
+    logger.error(MONGODB_TITLE.error, err);
   });
 
   mongoose.connection.on('disconnected', () => {
-    console.warn(MONGODB_TITLE.disconnected);
+    logger.warn(MONGODB_TITLE.disconnected);
   });
 }

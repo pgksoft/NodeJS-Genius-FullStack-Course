@@ -10,23 +10,32 @@
         "skipLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@domain/*": [
-                "src/domain/*"
-            ],
             "@api/*": [
                 "src/app-infrastructure/api/*"
+            ],
+            "@access/*": [
+                "src/app-infrastructure/access/*"
             ],
             "@helpers/*": [
                 "src/app-infrastructure/app-helpers/*"
             ],
+            "@sys/*": [
+                "src/app-infrastructure/app-sys/*"
+            ],
             "@middleware/*": [
                 "src/app-infrastructure/middleware/*"
+            ],
+            "@logger/*": [
+                "src/app-infrastructure/logger/*"
             ],
             "@infra/*": [
                 "src/app-infrastructure/*"
             ],
             "@db/*": [
                 "src/db/*"
+            ],
+            "@domain/*": [
+                "src/domain/*"
             ],
             "@src/*": [
                 "src/*"
@@ -35,7 +44,9 @@
     },
     "include": [
         "src",
-        "tests"
+        "tests",
+        "settings-core",
+        "storage-migrations"
     ],
     "exclude": [
         "dist",

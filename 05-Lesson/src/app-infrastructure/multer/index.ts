@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { config } from '../app-config';
+import { config } from '../../../settings-core/env';
 
 export const MULTER_REQUEST_KEY = 'demo-image';
 

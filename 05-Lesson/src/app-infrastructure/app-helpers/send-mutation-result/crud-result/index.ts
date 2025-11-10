@@ -1,7 +1,7 @@
 import type {
   TEntityMutationError,
   TEntityMutationSuccess,
-} from '../../../api/types/t-entity-mutation-result';
+} from '../../../app-entities/app-entity-types/t-entity-mutation-result';
 import APP_TITLE from '../../../const/app-title';
 
 export const getCrudResultError = (

@@ -1,5 +1,5 @@
 import { MongoServerError } from 'mongodb';
-import type { TEntityMutationError } from '../../app-infrastructure/api/types/t-entity-mutation-result';
+import type { TEntityMutationError } from '../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
 import { getCrudResultError } from '../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
 import { MONGODB_TITLE } from '../const/mongodb_title';
 

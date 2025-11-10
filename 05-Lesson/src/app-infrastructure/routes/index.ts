@@ -1,28 +1,35 @@
 import type { Express } from 'express';
 import express from 'express';
 import APP_TITLE from '../const/app-title';
-import apiUrl from '../api/const/api-url';
+import apiAuthUrl, { apiUnAuthUrl } from '../api/const/api-url';
 import taskRouter from '../../domain/tasks/routes';
 import userRegisterRouter from '../../domain/users/routes/user-register';
 import userLoginRouter from '../../domain/users/routes/user-login';
 import imageRouter from '../../domain/multer-examples/routes';
 import mediaRouter from '../../domain/media-library/routes';
-import { config } from '../app-config';
+import { config } from '../../../settings-core/env';
+import { requireAuth } from '@middleware/require-auth';
 
 export const applyRoutes = (app: Express) => {
-  app.get(apiUrl.server, (req, res) => {
+  // Unauthorized URLs
+
+  app.get(apiUnAuthUrl.server, (req, res) => {
     res.send(`${APP_TITLE.hi}, ${APP_TITLE.name}!`);
   });
 
-  app.use(apiUrl.uploads, express.static(config.multerDestination));
+  app.use(apiUnAuthUrl.userRegister, userRegisterRouter);
 
-  app.use(apiUrl.task, taskRouter);
+  app.use(apiUnAuthUrl.userLogin, userLoginRouter);
 
-  app.use(apiUrl.userRegister, userRegisterRouter);
+  // Authorized URLs
 
-  app.use(apiUrl.userLogin, userLoginRouter);
+  app.use(requireAuth);
 
-  app.use(apiUrl.image, imageRouter);
+  app.use(apiAuthUrl.uploads, express.static(config.multerDestination));
 
-  app.use(apiUrl.mediaLibrary, mediaRouter);
+  app.use(apiAuthUrl.task, taskRouter);
+
+  app.use(apiAuthUrl.image, imageRouter);
+
+  app.use(apiAuthUrl.mediaLibrary, mediaRouter);
 };
