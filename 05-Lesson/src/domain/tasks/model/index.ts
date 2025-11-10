@@ -1,11 +1,12 @@
 import { Schema, model } from 'mongoose';
-import type { TEntityMember } from '../../../app-infrastructure/api/types/t-entity-member';
-import type TypeGuard from '../../../app-infrastructure/app-helpers/type-guard';
-import type { TEntityRecord } from '../../../app-infrastructure/api/types/t-entity-data';
+import type { TEntityMember } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-member';
+import type TypeGuard from '../../../app-infrastructure/app-type-helpers/type-guard';
+import type { TEntityRecord } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-data';
 
 export type TTask = {
-  text: String;
-  isCompleted?: boolean;
+  description: string;
+  completed?: boolean;
+  createBy: Schema.Types.ObjectId;
 } & TEntityMember;
 
 export type TTasks = TTask[];
@@ -13,8 +14,9 @@ export type TTasks = TTask[];
 export type TTaskDto = Omit<TTask, '_id' | '__v'>;
 
 const taskSchema = new Schema<TTaskDto>({
-  text: { type: String, required: true, unique: true },
-  isCompleted: { type: String, default: false },
+  description: { type: String, required: true, unique: true },
+  completed: { type: Boolean, default: false },
+  createBy: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
 });
 
 export const TaskModel = model<TTaskDto>('Task', taskSchema);
@@ -24,9 +26,9 @@ export const isTaskDto: TypeGuard<TTaskDto> = (value): value is TTaskDto => {
   return (
     value !== null &&
     typeof value === 'object' &&
-    'text' in value &&
-    typeof (value as TEntityRecord).text === 'string' &&
-    (!('isCompleted' in value) ||
-      ('isCompleted' in value && typeof (value as TEntityRecord).isCompleted === 'boolean'))
+    'description' in value &&
+    typeof (value as TEntityRecord).description === 'string' &&
+    (!('completed' in value) ||
+      ('completed' in value && typeof (value as TEntityRecord).completed === 'boolean'))
   );
 };

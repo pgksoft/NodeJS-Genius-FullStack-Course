@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose';
-import type { TEntityMember } from '../../../app-infrastructure/api/types/t-entity-member';
-import type TypeGuard from '../../../app-infrastructure/app-helpers/type-guard';
-import type { TEntityRecord } from '../../../app-infrastructure/api/types/t-entity-data';
+import type { TEntityMember } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-member';
+import type TypeGuard from '../../../app-infrastructure/app-type-helpers/type-guard';
+import type { TEntityRecord } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-data';
+import { isRoleType } from '@access/role-type';
 
 export type TUser = {
   firstName: string;
@@ -40,7 +41,10 @@ export const isUserDto: TypeGuard<TUserDto> = (value): value is TUserDto => {
     typeof (value as TEntityRecord).email === 'string' &&
     'password' in value &&
     typeof (value as TEntityRecord).password === 'string' &&
-    (!('role' in value) || ('role' in value && typeof (value as TEntityRecord).role === 'string'))
+    (!('role' in value) ||
+      ('role' in value &&
+        typeof (value as TEntityRecord).role === 'string' &&
+        isRoleType((value as TEntityRecord).role)))
   );
 };
 

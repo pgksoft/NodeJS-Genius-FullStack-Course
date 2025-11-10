@@ -1,4 +1,4 @@
-import type TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result';
+import type TEntityMutationResult from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
 import {
   getCrudResultError,

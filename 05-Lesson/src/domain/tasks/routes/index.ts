@@ -9,22 +9,21 @@ import { isStrictValidObjectId } from '../../../db/is-strict-valid-object-id';
 import { MONGODB_TITLE } from '../../../db/const/mongodb_title';
 import { task } from '../crud/task';
 import { taskRemove } from '../crud/task-remove';
-import { checkAuth } from '../../../app-infrastructure/middleware/check-auth';
-import { checkAdmin } from '../../../app-infrastructure/middleware/check-admin';
+import { withAbility } from '@middleware/with-ability';
 
 const router = Router();
 
-router.get('/', checkAuth, checkAdmin, async (req, res) => {
-  const result = await taskList();
+router.get('/', withAbility('task', 'readList'), async (req, res) => {
+  const result = await taskList(req.abilityAccess.filter);
   sendMutationResult(result, res);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', withAbility('task', 'readOne'), async (req, res) => {
   const id = req.params.id;
   if (!isStrictValidObjectId(id)) {
     return sendMutationResult(getCrudResultError(400, MONGODB_TITLE.invalidId), res);
   }
-  const result = await task(id);
+  const result = await task(id, req.abilityAccess.filter);
   return sendMutationResult(result, res);
 });
 
@@ -34,11 +33,11 @@ router.post('/', async (req, res) => {
   if (!isMutationTask) {
     return sendMutationResult(getCrudResultError(400), res);
   }
-  const result = await taskCreate(taskDto);
+  const result = await taskCreate(taskDto, req.user!._id);
   return sendMutationResult(result, res);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', withAbility('task', 'update'), async (req, res) => {
   const id = req.params.id;
   if (!isStrictValidObjectId(id)) {
     return sendMutationResult(getCrudResultError(400, MONGODB_TITLE.invalidId), res);
@@ -48,16 +47,16 @@ router.put('/:id', async (req, res) => {
   if (!isMutationTask) {
     return sendMutationResult(getCrudResultError(400), res);
   }
-  const result = await taskUpdate(id, taskDto);
+  const result = await taskUpdate(id, taskDto, req.abilityAccess.filter);
   return sendMutationResult(result, res);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAbility('task', 'delete'), async (req, res) => {
   const id = req.params.id;
   if (!isStrictValidObjectId(id)) {
     return sendMutationResult(getCrudResultError(400, MONGODB_TITLE.invalidId), res);
   }
-  const result = await taskRemove(id);
+  const result = await taskRemove(id, req.abilityAccess.filter);
   return sendMutationResult(result, res);
 });
 

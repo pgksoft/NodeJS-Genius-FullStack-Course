@@ -1,5 +1,5 @@
 import type { Response } from 'express';
-import type TEntityMutationResult from '../../api/types/t-entity-mutation-result';
+import type TEntityMutationResult from '../../app-entities/app-entity-types/t-entity-mutation-result';
 
 const sendMutationResult = <T>(result: TEntityMutationResult<T>, res: Response) => {
   if (result.isSuccess) {

@@ -1,4 +1,4 @@
-import type TEntityMutationResult from '../../../app-infrastructure/api/types/t-entity-mutation-result';
+import type TEntityMutationResult from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
 import {
   getCrudResultError,
   getCrudResultSuccess,
@@ -6,10 +6,14 @@ import {
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
 import type { TTask } from '../model';
 import { TaskModel } from '../model';
+import type TUnknownRecord from '@infra/app-type-helpers/t-unknown-record';
 
-export async function task(id: string): Promise<TEntityMutationResult<TTask>> {
+export async function task(
+  id: string,
+  filter: TUnknownRecord,
+): Promise<TEntityMutationResult<TTask>> {
   try {
-    const task = await TaskModel.findById(id).lean();
+    const task = await TaskModel.findOne({ _id: id, ...filter }).lean();
     if (!task) {
       return getCrudResultError(404);
     }

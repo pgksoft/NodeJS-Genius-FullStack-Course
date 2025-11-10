@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import type { TEntityMember } from '../../../app-infrastructure/api/types/t-entity-member';
-import type TypeGuard from '../../../app-infrastructure/app-helpers/type-guard';
-import type { TEntityRecord } from '../../../app-infrastructure/api/types/t-entity-data';
+import type { TEntityMember } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-member';
+import type TypeGuard from '../../../app-infrastructure/app-type-helpers/type-guard';
+import type { TEntityRecord } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-data';
 
 export type TMedia = {
   description: String;

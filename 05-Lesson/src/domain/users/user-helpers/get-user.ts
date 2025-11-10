@@ -1,4 +1,4 @@
-import type TEntityMutationResult from '@api/types/t-entity-mutation-result';
+import type TEntityMutationResult from '@infra/app-entities/app-entity-types/t-entity-mutation-result';
 import {
   getCrudResultError,
   getCrudResultSuccess,
