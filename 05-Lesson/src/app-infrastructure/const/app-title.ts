@@ -2,6 +2,7 @@ const APP_TITLE: Record<string, string> = {
   name: 'ExpressJS server & MongoDB',
   hi: 'Hi',
   launchServer: '🚀 ExpressJS server is launching on',
+  aboutDocs: 'Swagger docs available at',
   localUrl: 'http://localhost',
   startupError: '❌ Startup error:',
   unknownError: 'unknown error',

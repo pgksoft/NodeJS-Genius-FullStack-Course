@@ -5,5 +5,15 @@
   "printWidth": 100,
   "tabWidth": 2,
   "arrowParens": "always",
-  "endOfLine": "lf"
-} 
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "*.yaml",
+      "options": { "tabWidth": 2 }
+    },
+    {
+      "files": "*.yml",
+      "options": { "tabWidth": 2 }
+    }
+  ]
+}

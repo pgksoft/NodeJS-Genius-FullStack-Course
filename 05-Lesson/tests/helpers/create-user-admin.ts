@@ -1,8 +1,8 @@
-import { userRegister } from '@domain/users/crud/user-register'
-import { TEST_VAR } from './const'
+import { userRegister } from '@domain/users/control/user-register';
+import { TEST_VAR } from './const';
 
 export const createUserAdmin = async () => {
-  const dto = TEST_VAR.userAdmin
+  const dto = TEST_VAR.userAdmin;
 
-  await userRegister(dto)
-}
+  await userRegister(dto);
+};

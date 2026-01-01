@@ -1,5 +1,5 @@
-import { policies } from '@access/policies';
-import { isRoleType } from '@access/role-type';
+import { policies } from '@access/const/policies';
+import { isRoleType } from '@access/types/role-type';
 import type { TUserCrypt } from '@domain/users/model';
 import type { TEntityAction } from '@infra/app-entities/app-entity-types/t-entity-actions';
 import type { TEntityNameKey } from '@infra/app-entities/app-entity-types/t-entity-name-key';

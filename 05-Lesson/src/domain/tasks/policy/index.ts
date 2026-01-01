@@ -1,5 +1,5 @@
-import { defaultEntityActionPolicy } from '@access/const';
-import type { TEntityPolicy } from '@access/entity-policies.ts';
+import { defaultEntityActionPolicy } from '@access/const/default-entity-action-policy';
+import type { TEntityPolicy } from '@access/types/entity-policies.ts';
 
 export const taskPolicy: TEntityPolicy = {
   readOne: defaultEntityActionPolicy,
