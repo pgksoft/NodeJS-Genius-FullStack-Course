@@ -2,7 +2,7 @@ import createEnumGuard from '@helpers/create-enum-guard';
 
 enum EntityNameKeys {
   task,
-  media,
+  mediaLibrary,
   user,
 }
 

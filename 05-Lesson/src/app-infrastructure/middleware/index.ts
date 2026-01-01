@@ -4,12 +4,12 @@ import swaggerUi from 'swagger-ui-express';
 import { requestLogger } from './request-logger';
 import { extractUser } from './extract-user';
 import { apiUnAuthUrl } from '@api/const/api-url';
-import { swaggerSpec } from '@src/api-docs/swagger';
+import { swaggerSpecV1 } from '@infra/swagger';
 import '@sys/@types/swagger-ui-express';
 
 export const applyMiddleware = (app: Express) => {
   app.use(bodyParser.json());
   app.use(extractUser);
   app.use(requestLogger);
-  app.use(apiUnAuthUrl.apiDocs, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use(apiUnAuthUrl.apiDocsV1, swaggerUi.serve, swaggerUi.setup(swaggerSpecV1));
 };

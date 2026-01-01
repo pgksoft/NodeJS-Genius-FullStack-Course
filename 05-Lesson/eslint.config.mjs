@@ -1,6 +1,7 @@
 import parser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
   {
@@ -22,6 +23,7 @@ export default [
     plugins: {
       '@typescript-eslint': tsPlugin,
       prettier,
+      import: importPlugin,
     },
     rules: {
       // 🔧 general rules
@@ -34,6 +36,9 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/consistent-type-imports': 'error',
+
+      // 🚨
+      'import/no-cycle': ['error', { maxDepth: 1 }],
     },
   },
   {

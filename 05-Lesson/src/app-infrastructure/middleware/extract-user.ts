@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { getUser } from '../../domain/users/user-helpers/get-user';
+import { getUser } from '../../domain/users/helpers/get-user';
 import { analyzeMongoError } from '@db/analyze-mongo-error';
 import { logger } from '@logger/index';
 

@@ -1,3 +1,5 @@
+import { TUserDto } from '@domain/users/model';
+
 export const TEST_VAR = {
   userAdmin: {
     firstName: 'Admin',
@@ -5,5 +7,5 @@ export const TEST_VAR = {
     email: 'admin@example.com',
     role: 'admin',
     password: '987654321',
-  },
-}
+  } satisfies TUserDto,
+};

@@ -1,6 +1,6 @@
 export const apiUnAuthUrl = {
   server: '/',
-  apiDocs: '/api-docs',
+  apiDocsV1: '/api-docs/v1',
   userRegister: '/api/register-user',
   userLogin: '/api/login-user',
 };
@@ -8,6 +8,7 @@ export const apiUnAuthUrl = {
 export const publicUrl = Object.values(apiUnAuthUrl);
 
 const apiAuthUrl = {
+  user: '/api/users',
   task: '/api/tasks',
   image: '/api/image',
   mediaLibrary: '/api/media-library',

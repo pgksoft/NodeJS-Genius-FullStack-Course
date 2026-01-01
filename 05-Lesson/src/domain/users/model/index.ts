@@ -2,7 +2,9 @@ import { Schema, model } from 'mongoose';
 import type { TEntityMember } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-member';
 import type TypeGuard from '../../../app-infrastructure/app-type-helpers/type-guard';
 import type { TEntityRecord } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-data';
-import { isRoleType } from '@access/role-type';
+import type { TRoleType } from '@access/types/role-type';
+import { isRoleType } from '@access/types/role-type';
+import type { TFieldsSchema } from '@infra/app-type-helpers/t-fields-schema';
 
 export type TUser = {
   firstName: string;
@@ -18,13 +20,41 @@ export type TUserDto = Omit<TUser, '_id' | '__v'>;
 export type TUserCrypt = Omit<TUser, 'password'>;
 export type TUserLogin = Pick<TUser, 'email' | 'password'>;
 
-const userSchema = new Schema<TUserDto>({
-  firstName: { type: String, required: true, maxLength: 20 },
-  lastName: { type: String, required: true, maxLength: 40 },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, default: 'user' },
-});
+export type TUsersCrypt = TUserCrypt[];
+
+export const userFieldsSchema: TFieldsSchema<TUserDto> = {
+  firstName: {
+    type: String,
+    required: true,
+    maxLength: 20,
+    openApi: { description: 'User name' },
+  },
+  lastName: {
+    type: String,
+    required: true,
+    maxLength: 40,
+    openApi: { description: 'User last name' },
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    openApi: { format: 'email' },
+  },
+  password: {
+    type: String,
+    required: true,
+    openApi: { format: 'password' },
+  },
+  role: {
+    type: String,
+    default: 'member' satisfies TRoleType,
+    enum: ['admin', 'member'] satisfies TRoleType[],
+    openApi: { description: 'User role' },
+  },
+};
+
+const userSchema = new Schema<TUserDto>(userFieldsSchema);
 
 export const UserModel = model<TUserDto>('User', userSchema);
 

@@ -5,25 +5,28 @@ import apiAuthUrl from '@api/const/api-url';
 import { TaskModel } from '@domain/tasks/model';
 import { getBasicAuthHeader } from 'tests/helpers/get-basic-auth-header';
 import { TEST_VAR } from 'tests/helpers/const';
+import { UserModel } from '@domain/users/model';
+
+const { email, password } = TEST_VAR.userAdmin;
 
 describe('Task API', () => {
   const app = createApp();
   // CREATE
-  it('should create a task', async () => {
+  it('Should create a task', async () => {
     const res = await request(app)
       .post(apiAuthUrl.task)
-      .send({ text: 'New Task', isCompleted: false });
+      .set('Authorization', getBasicAuthHeader(email, password))
+      .send({ description: 'New Task', isCompleted: false });
 
     expect(res.status).to.equal(201);
-    expect(res.body.text).to.equal('New Task');
+    expect(res.body.description).to.equal('New Task');
   });
 
   // READ (all)
-  it('should get all tasks', async () => {
-    await TaskModel.create({ description: 'Task 1' });
-    await TaskModel.create({ description: 'Task 2' });
-
-    const { email, password } = TEST_VAR.userAdmin;
+  it('Should get all tasks', async () => {
+    const admin = await UserModel.findOne({ email: TEST_VAR.userAdmin.email }).lean();
+    await TaskModel.create({ description: 'Task 1', createBy: admin?._id });
+    await TaskModel.create({ description: 'Task 2', createBy: admin?._id });
 
     const res = await request(app)
       .get(apiAuthUrl.task)
@@ -35,46 +38,61 @@ describe('Task API', () => {
   });
 
   // READ (by id)
-  it('should get a task by id', async () => {
-    const task = await TaskModel.create({ description: 'Single Task' });
+  it('Should get a task by id', async () => {
+    const admin = await UserModel.findOne({ email: TEST_VAR.userAdmin.email }).lean();
+    const task = await TaskModel.create({ description: 'Single Task', createBy: admin?._id });
 
-    const res = await request(app).get(`${apiAuthUrl.task}/${task._id}`).expect(200);
+    const res = await request(app)
+      .get(`${apiAuthUrl.task}/${task._id}`)
+      .set('Authorization', getBasicAuthHeader(email, password))
+      .expect(200);
 
-    expect(res.body.text).to.equal('Single Task');
+    expect(res.body.description).to.equal('Single Task');
   });
 
   // UPDATE
-  it('should update a task', async () => {
-    const task = await TaskModel.create({ description: 'Old Title' });
+  it('Should update a task', async () => {
+    const admin = await UserModel.findOne({ email: TEST_VAR.userAdmin.email }).lean();
+    const task = await TaskModel.create({ description: 'Old Title', createBy: admin?._id });
 
     const res = await request(app)
       .put(`${apiAuthUrl.task}/${task._id}`)
-      .send({ text: 'New Title' })
+      .set('Authorization', getBasicAuthHeader(email, password))
+      .send({ description: 'New Title' })
       .expect(200);
 
-    expect(res.body.text).to.equal('New Title');
+    expect(res.body.description).to.equal('New Title');
   });
 
   // DELETE
-  it('should delete a task', async () => {
-    const task = await TaskModel.create({ description: 'To Delete' });
+  it('Should delete a task', async () => {
+    const admin = await UserModel.findOne({ email: TEST_VAR.userAdmin.email }).lean();
+    const task = await TaskModel.create({ description: 'To Delete', createBy: admin?._id });
 
-    await request(app).delete(`${apiAuthUrl.task}/${task._id}`).expect(204);
+    await request(app)
+      .delete(`${apiAuthUrl.task}/${task._id}`)
+      .set('Authorization', getBasicAuthHeader(email, password))
+      .expect(204);
 
     const found = await TaskModel.findById(task._id);
     expect(found).to.be.null;
   });
 
   // VALID DTO
-  it('should return 400 for invalid DTO', async () => {
-    const res = await request(app).post(apiAuthUrl.task).send({ wrongField: 'oops' });
+  it('Should return 400 for invalid DTO', async () => {
+    const res = await request(app)
+      .post(apiAuthUrl.task)
+      .set('Authorization', getBasicAuthHeader(email, password))
+      .send({ wrongField: 'oops' });
 
     expect(res.status).to.equal(400);
   });
 
   // VALID ID LIKE ObjectId
-  it('should return 400 for invalid ObjectId', async () => {
-    const res = await request(app).get(`${apiAuthUrl.task}/not-an-id`);
+  it('Should return 400 for invalid ObjectId', async () => {
+    const res = await request(app)
+      .get(`${apiAuthUrl.task}/not-an-id`)
+      .set('Authorization', getBasicAuthHeader(email, password));
     expect(res.status).to.equal(400);
   });
 });
