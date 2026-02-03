@@ -20,6 +20,14 @@ export default [
         es2021: true,
       },
     },
+    // will understand aliases (@api/*, @domain/*, …) and correctly build a dependency graph
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
     plugins: {
       '@typescript-eslint': tsPlugin,
       prettier,

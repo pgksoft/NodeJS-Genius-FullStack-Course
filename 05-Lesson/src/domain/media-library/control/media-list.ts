@@ -2,21 +2,30 @@ import type TUnknownRecord from '@infra/app-type-helpers/t-unknown-record';
 import type TEntityMutationResult from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
 import { getCrudResultSuccess } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
-import type { TMedia, TMediaLibrary } from '../model';
-import { MediaModel } from '../model';
-import { populateEntity } from '@db/populate-entity';
-import type { TUser } from '@domain/users/model';
+import {
+  MediaModel,
+  type TApiMedia,
+  type TApiMediaLibrary,
+  type TMediaPopulated,
+  type TMediaSchema,
+} from '../model';
+import { listPopulateAndSerialize } from '@db/populate-&-serialize';
+import {
+  mediaPopulateConfig,
+  mediaSerializationRules,
+} from '../const/serialization&populate-config';
 
 export async function mediaList(
   filter: TUnknownRecord,
-): Promise<TEntityMutationResult<TMediaLibrary>> {
+): Promise<TEntityMutationResult<TApiMediaLibrary>> {
   try {
-    const mediaLibrary = await populateEntity<TMedia, 'createBy', TUser, keyof TUser>(
-      MediaModel.find(filter),
-      'createBy',
-      { mode: 'exclude', keys: ['password'] },
-    ).lean<TMediaLibrary>();
-    return getCrudResultSuccess(mediaLibrary);
+    const apiMediaLibrary = await listPopulateAndSerialize<
+      TMediaPopulated,
+      typeof mediaSerializationRules,
+      TApiMedia,
+      TMediaSchema
+    >(MediaModel, filter, mediaSerializationRules, mediaPopulateConfig);
+    return getCrudResultSuccess(apiMediaLibrary);
   } catch (e) {
     return analyzeMongoError(e);
   }

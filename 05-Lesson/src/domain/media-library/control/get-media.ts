@@ -1,19 +1,29 @@
+import { findByIdPopulateAndSerialize } from '@db/populate-&-serialize';
 import type TEntityMutationResult from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
 import {
   getCrudResultError,
   getCrudResultSuccess,
 } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
-import type { TMedia } from '../model';
+import type { TApiMedia, TMediaPopulated, TMediaSchema } from '../model';
 import { MediaModel } from '../model';
+import {
+  mediaPopulateConfig,
+  mediaSerializationRules,
+} from '../const/serialization&populate-config';
 
-export async function getMedia(id: string): Promise<TEntityMutationResult<TMedia>> {
+export async function getMedia(id: string): Promise<TEntityMutationResult<TApiMedia>> {
   try {
-    const media = await MediaModel.findById(id).lean();
-    if (!media) {
+    const apiMedia = await findByIdPopulateAndSerialize<
+      TMediaPopulated,
+      typeof mediaSerializationRules,
+      TApiMedia,
+      TMediaSchema
+    >(MediaModel, id, mediaSerializationRules, mediaPopulateConfig);
+    if (!apiMedia) {
       return getCrudResultError(404);
     }
-    return getCrudResultSuccess(media);
+    return getCrudResultSuccess(apiMedia);
   } catch (e) {
     return analyzeMongoError(e);
   }

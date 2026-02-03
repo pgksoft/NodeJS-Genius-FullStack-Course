@@ -3,14 +3,14 @@ import { getCrudResultSuccess } from '../../../app-infrastructure/app-helpers/se
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
 import type TUnknownRecord from '@infra/app-type-helpers/t-unknown-record';
 import { UserModel, type TUsersCrypt } from '../model';
-import { toDtoArray } from '@helpers/to-dto-array';
+import { omitKeysArray } from '@helpers/omit-keys-array';
 
 export async function userList(
   filter: TUnknownRecord,
 ): Promise<TEntityMutationResult<TUsersCrypt>> {
   try {
     const users = await UserModel.find(filter).lean();
-    return getCrudResultSuccess(toDtoArray(users, ['password']));
+    return getCrudResultSuccess(omitKeysArray(users, ['password']));
   } catch (e) {
     return analyzeMongoError(e);
   }

@@ -8,6 +8,8 @@ import userLoginRouter from '../../domain/users/routes/user-login';
 import imageRouter from '../../domain/multer-examples/routes';
 import mediaRouter from '../../domain/media-library/routes';
 import userRouter from '@domain/users/routes';
+import taskStatusDicRouter from '@domain/tasks/inner-entities/task-status-dic/routes';
+import taskStatusLogRouter from '@domain/tasks/inner-entities/task-status-log/routes';
 import { config } from '../../../settings-core/env';
 import { requireAuth } from '@middleware/require-auth';
 
@@ -31,6 +33,10 @@ export const applyRoutes = (app: Express) => {
   app.use(apiAuthUrl.uploads, express.static(config.multerDestination));
 
   app.use(apiAuthUrl.task, taskRouter);
+
+  app.use(apiAuthUrl.taskStatusDic, taskStatusDicRouter);
+
+  app.use(apiAuthUrl.taskStatusLog, taskStatusLogRouter);
 
   app.use(apiAuthUrl.image, imageRouter);
 

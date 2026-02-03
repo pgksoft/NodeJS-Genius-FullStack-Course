@@ -28,6 +28,9 @@
             "@logger/*": [
                 "src/app-infrastructure/logger/*"
             ],
+            "@serialization/*": [
+                "src/app-infrastructure/serialization/*"
+            ],
             "@infra/*": [
                 "src/app-infrastructure/*"
             ],

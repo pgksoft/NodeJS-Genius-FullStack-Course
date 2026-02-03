@@ -7,4 +7,5 @@ export const taskPolicy: TEntityPolicy = {
   create: defaultEntityActionPolicy,
   update: defaultEntityActionPolicy,
   delete: defaultEntityActionPolicy,
+  'task-change-status': defaultEntityActionPolicy,
 };

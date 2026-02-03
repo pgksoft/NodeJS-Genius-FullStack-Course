@@ -5,9 +5,9 @@ import { getCrudResultError } from '@helpers/send-mutation-result/crud-result';
 import sendMutationResult from '@helpers/send-mutation-result';
 import APP_TITLE from '@infra/const/app-title';
 import type { TEntityNameKey } from '@infra/app-entities/app-entity-types/t-entity-name-key';
-import type { TEntityAction } from '@infra/app-entities/app-entity-types/t-entity-actions';
+import type { TAppAction } from '@infra/app-entities/app-entity-types/t-entity-actions';
 
-export function withAbility(entity: TEntityNameKey, action: TEntityAction) {
+export function withAbility(entity: TEntityNameKey, action: TAppAction) {
   return (req: Request, res: Response, next: NextFunction) => {
     const abilityAccess = getAbilityAccess({ entity, action, user: req.user });
     if (!abilityAccess.isAbility) {

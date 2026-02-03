@@ -1,6 +1,6 @@
-import type { TUserCrypt } from '../model';
+import type { TApiUser } from '../model';
 
-const getUserName = (user?: TUserCrypt): string => {
+const getUserName = (user?: TApiUser): string => {
   if (user) {
     return `${user.firstName} ${user.lastName}`;
   }

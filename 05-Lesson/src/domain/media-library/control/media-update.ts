@@ -3,12 +3,15 @@ import {
   getCrudResultError,
   getCrudResultSuccess,
 } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
-import { MediaModel, type TMedia } from '../model';
+import { MediaModel, type TApiMedia, type TMediaPopulated, type TMediaSchema } from '../model';
 import sendMutationResult from '@helpers/send-mutation-result';
 import { analyzeMongoError } from '@db/analyze-mongo-error';
-import { populateEntity } from '@db/populate-entity';
-import type { TUser } from '@domain/users/model';
 import { removeFile } from '@helpers/files/remove';
+import { findByIdPopulateAndSerialize } from '@db/populate-&-serialize';
+import {
+  mediaPopulateConfig,
+  mediaSerializationRules,
+} from '../const/serialization&populate-config';
 
 export const mediaUpdate = async (req: Request, res: Response) => {
   try {
@@ -34,13 +37,14 @@ export const mediaUpdate = async (req: Request, res: Response) => {
 
     await currentMedia.save();
 
-    const mutationMedia = await populateEntity<TMedia, 'createBy', TUser, keyof TUser>(
-      MediaModel.findById(id),
-      'createBy',
-      { mode: 'exclude', keys: ['password'] },
-    ).lean();
+    const apiMedia = await findByIdPopulateAndSerialize<
+      TMediaPopulated,
+      typeof mediaSerializationRules,
+      TApiMedia,
+      TMediaSchema
+    >(MediaModel, id, mediaSerializationRules, mediaPopulateConfig);
 
-    return sendMutationResult(getCrudResultSuccess(mutationMedia), res);
+    return sendMutationResult(getCrudResultSuccess(apiMedia), res);
   } catch (err) {
     return sendMutationResult(analyzeMongoError(err), res);
   }

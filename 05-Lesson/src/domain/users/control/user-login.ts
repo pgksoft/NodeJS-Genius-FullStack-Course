@@ -1,4 +1,3 @@
-import { toDto } from '@helpers/to-dto';
 import type TEntityMutationResult from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
 import {
   getCrudResultError,
@@ -7,10 +6,11 @@ import {
 import { comparePlain } from '../../../app-infrastructure/crypt';
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
 import { MONGODB_TITLE } from '../../../db/const/mongodb_title';
-import type { TUserCrypt, TUserLogin } from '../model';
+import type { TApiUser, TUserLogin } from '../model';
 import { UserModel } from '../model';
+import { omitKeys } from '@helpers/omit-keys';
 
-export async function userLogin(dataLogin: TUserLogin): Promise<TEntityMutationResult<TUserCrypt>> {
+export async function userLogin(dataLogin: TUserLogin): Promise<TEntityMutationResult<TApiUser>> {
   const { email, password: candidatePassword } = dataLogin;
   try {
     const document = await UserModel.findOne({ email }).lean();
@@ -21,7 +21,7 @@ export async function userLogin(dataLogin: TUserLogin): Promise<TEntityMutationR
     if (!isValid) {
       return getCrudResultError(400, MONGODB_TITLE.invalidLogin);
     }
-    const userData = toDto(document, ['password']);
+    const userData = omitKeys(document, ['password']);
     return getCrudResultSuccess(userData, 201);
   } catch (e) {
     return analyzeMongoError(e);

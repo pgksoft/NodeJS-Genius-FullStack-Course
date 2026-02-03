@@ -1,26 +1,45 @@
 import type { Types } from 'mongoose';
 import type TEntityMutationResult from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-mutation-result';
-import { getCrudResultSuccess } from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
+import {
+  getCrudResultError,
+  getCrudResultSuccess,
+} from '../../../app-infrastructure/app-helpers/send-mutation-result/crud-result';
 import { analyzeMongoError } from '../../../db/analyze-mongo-error';
-import type { TFileMeta, TMedia, TMediaDto } from '../model';
+import type { TApiMedia, TFileMeta, TMediaDto, TMediaPopulated, TMediaSchema } from '../model';
 import { MediaModel } from '../model';
-import { populateEntity } from '@db/populate-entity';
-import type { TUser } from '@domain/users/model';
+import { createPopulateAndSerialize } from '@db/populate-&-serialize';
+import {
+  mediaPopulateConfig,
+  mediaSerializationRules,
+} from '../const/serialization&populate-config';
+import { removeFile } from '@helpers/files/remove';
 
 export async function mediaCreate(
   mediaDto: TMediaDto,
   fileMeta: TFileMeta,
   userID: Types.ObjectId,
-): Promise<TEntityMutationResult<TMedia>> {
+): Promise<TEntityMutationResult<TApiMedia>> {
   try {
-    const document = await MediaModel.create({ ...mediaDto, fileMeta, createBy: userID });
-    const media = await populateEntity<TMedia, 'createBy', TUser, keyof TUser>(
-      MediaModel.findById(document._id),
-      'createBy',
-      { mode: 'exclude', keys: ['password'] },
-    ).lean();
-    return getCrudResultSuccess(media, 201);
+    const apiMedia = await createPopulateAndSerialize<
+      TMediaPopulated,
+      typeof mediaSerializationRules,
+      TApiMedia, // API DTO
+      TMediaSchema // schema type
+    >(
+      MediaModel,
+      {
+        ...mediaDto,
+        fileMeta,
+        createBy: userID,
+      },
+      mediaSerializationRules,
+      mediaPopulateConfig,
+    );
+    if (!apiMedia) return getCrudResultError(464);
+    return getCrudResultSuccess(apiMedia, 201);
   } catch (e) {
+    // removing uploaded file
+    await removeFile(fileMeta.path);
     return analyzeMongoError(e);
   }
 }

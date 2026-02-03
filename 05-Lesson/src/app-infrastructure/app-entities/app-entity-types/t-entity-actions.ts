@@ -1,13 +1,18 @@
-import createEnumGuard from '@helpers/create-enum-guard';
+import { getArrayAsStringConst } from '@helpers/get-array-as-string-const';
 
-enum EntityActions {
-  readOne,
-  readList,
-  create,
-  update,
-  delete,
-}
+const mainEntityActions = getArrayAsStringConst(
+  'readOne',
+  'readList',
+  'create',
+  'update',
+  'delete',
+);
+const taskActions = getArrayAsStringConst('task-change-status');
 
-export type TEntityAction = keyof typeof EntityActions;
+export const appActions = [...mainEntityActions, ...taskActions] as const;
+export type TAppAction = (typeof appActions)[number];
 
-export const isEntityAction = createEnumGuard(EntityActions);
+// runtime guard
+const allSetAppAction = new Set<string>(appActions as readonly string[]);
+export const isAppAction = (v: unknown): v is TAppAction =>
+  typeof v === 'string' && allSetAppAction.has(v);
