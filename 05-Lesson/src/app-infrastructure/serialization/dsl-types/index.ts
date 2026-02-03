@@ -1,4 +1,4 @@
-// Базовые правила (без дженериков, без flatten/custom/include/entity)
+// Basic rules (no generics, no flatten/custom/include/entity)
 export type TSerializeExcludeRule = {
   kind: 'exclude';
 };
@@ -10,30 +10,29 @@ export type TSerializeRenameRule = {
 
 export type TSerializePrimitiveRule = { kind: 'date' } | { kind: 'objectId' };
 
-// Типизированное правило для вложенной сущности
-// Ключевая идея: generic <TEntity> даёт типобезопасный TApi.
+// Typed rule for a nested entity
+// Key idea: generic <TEntity> gives a type-safe TApi.
 export type TSerializeEntityOfRule<TEntity = unknown> = {
   kind: 'entityOf';
-  // Правила для полей вложенной сущности
+  // Rules for nested entity fields
   rules?: RulesFor<TEntity>;
 };
 
-// Общее правило для одного поля типа TValue
+// General rule for one field of type TValue
 export type RuleFor<TValue> =
   | TSerializeExcludeRule
   | TSerializeRenameRule
   | TSerializePrimitiveRule
   | TSerializeEntityOfRule<TValue>;
 
-// Универсальное "runtime" правило
+// Universal "runtime" rule
 export type TSerializeRule = RuleFor<unknown>;
 
-// Набор правил для сущности на runtime‑уровне (общий, небезопасный по ключам)
-// ВАЖНО: значения могут быть undefined, потому что строгие RulesFor<T>
-// дают нам RuleFor<T[K]> | undefined
+// A set of rules for an entity at runtime level (general, key-unsafe)
+// IMPORTANT: values ​​can be undefined because strict RulesFor<T> gives us RuleFor<T[K]> | undefined
 export type TSerializationRules = Record<string, TSerializeRule | undefined>;
 
-// Строгий вариант: правила для конкретного T по его ключам.
+// Strict variant: rules for a specific T based on its keys.
 export type RulesFor<T> = {
   [K in keyof T]?: RuleFor<T[K]>;
 };
