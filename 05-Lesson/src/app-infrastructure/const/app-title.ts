@@ -12,6 +12,7 @@ const APP_TITLE: Record<string, string> = {
   401: 'Item not found',
   404: 'Not found',
   409: 'Entity record already exists',
+  464: 'Document not found after create or update',
   500: 'Internal Server Error',
   600: 'Invalid entity data from db',
 };

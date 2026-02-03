@@ -4,6 +4,8 @@ import type TypeGuard from '../../../app-infrastructure/app-type-helpers/type-gu
 import type { TEntityRecord } from '../../../app-infrastructure/app-entities/app-entity-types/t-entity-data';
 import type { TFieldsSchema } from '@infra/app-type-helpers/t-fields-schema';
 import type { MULTER_REQUEST_KEY } from '@infra/multer';
+import type { TApiUser, TUser } from '@domain/users/model';
+import { collectionNames } from '@db/const/collection-names';
 
 export type TFileMeta = Pick<Express.Multer.File, 'originalname' | 'mimetype' | 'path' | 'size'>;
 
@@ -16,7 +18,12 @@ export type TMedia = {
 
 export type TMediaLibrary = TMedia[];
 
-type TMediaSchema = Omit<TMedia, '_id' | '__v'>;
+export type TMediaPopulated = Omit<TMedia, 'createBy'> & { createBy: TUser };
+export type TApiMedia = Omit<TMedia, 'createBy'> & { createBy: TApiUser };
+
+export type TApiMediaLibrary = TApiMedia[];
+
+export type TMediaSchema = Omit<TMedia, '_id' | '__v'>;
 
 export type TMediaDto = Omit<TMediaSchema, 'createBy' | 'fileMeta'>;
 
@@ -40,7 +47,7 @@ export const mediaFieldsSchema: TFieldsSchema<TMediaSchema> = {
   },
   createBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: collectionNames.user,
     required: true,
     index: true,
     openApi: { description: 'User ID who created or change media file. Autocomplete.' },
@@ -49,7 +56,7 @@ export const mediaFieldsSchema: TFieldsSchema<TMediaSchema> = {
 
 const mediaSchema = new Schema<TMediaSchema>(mediaFieldsSchema);
 
-export const MediaModel = model<TMediaSchema>('Media-Library', mediaSchema);
+export const MediaModel = model<TMediaSchema>(collectionNames.mediaLibrary, mediaSchema);
 
 // helpers
 export const isMediaDto: TypeGuard<TMediaDto> = (value): value is TMediaDto => {

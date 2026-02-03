@@ -1,7 +1,7 @@
 import { policies } from '@access/const/policies';
 import { isRoleType } from '@access/types/role-type';
-import type { TUserCrypt } from '@domain/users/model';
-import type { TEntityAction } from '@infra/app-entities/app-entity-types/t-entity-actions';
+import type { TApiUser } from '@domain/users/model';
+import type { TAppAction } from '@infra/app-entities/app-entity-types/t-entity-actions';
 import type { TEntityNameKey } from '@infra/app-entities/app-entity-types/t-entity-name-key';
 import type TUnknownRecord from '@infra/app-type-helpers/t-unknown-record';
 
@@ -13,8 +13,8 @@ type TAbilityAccess = TAbilitySuccess | TAbilityError;
 
 type TGetAbilityAccessInput = {
   entity: TEntityNameKey;
-  action: TEntityAction;
-  user?: TUserCrypt;
+  action: TAppAction;
+  user?: TApiUser;
 };
 
 export const getAbilityAccess = ({

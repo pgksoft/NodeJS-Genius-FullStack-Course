@@ -5,6 +5,7 @@ import type { TEntityRecord } from '../../../app-infrastructure/app-entities/app
 import type { TRoleType } from '@access/types/role-type';
 import { isRoleType } from '@access/types/role-type';
 import type { TFieldsSchema } from '@infra/app-type-helpers/t-fields-schema';
+import { collectionNames } from '@db/const/collection-names';
 
 export type TUser = {
   firstName: string;
@@ -14,13 +15,15 @@ export type TUser = {
   role: string;
 } & TEntityMember;
 
+export type TUserPopulated = TUser;
+
 export type TUsers = TUser[];
 
 export type TUserDto = Omit<TUser, '_id' | '__v'>;
-export type TUserCrypt = Omit<TUser, 'password'>;
+export type TApiUser = Omit<TUser, 'password'>;
 export type TUserLogin = Pick<TUser, 'email' | 'password'>;
 
-export type TUsersCrypt = TUserCrypt[];
+export type TUsersCrypt = TApiUser[];
 
 export const userFieldsSchema: TFieldsSchema<TUserDto> = {
   firstName: {
@@ -56,7 +59,7 @@ export const userFieldsSchema: TFieldsSchema<TUserDto> = {
 
 const userSchema = new Schema<TUserDto>(userFieldsSchema);
 
-export const UserModel = model<TUserDto>('User', userSchema);
+export const UserModel = model<TUserDto>(collectionNames.user, userSchema);
 
 // helpers
 export const isUserDto: TypeGuard<TUserDto> = (value): value is TUserDto => {

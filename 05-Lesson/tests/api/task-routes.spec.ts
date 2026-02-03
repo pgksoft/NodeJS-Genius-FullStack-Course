@@ -2,28 +2,49 @@ import request from 'supertest';
 import { expect } from 'chai';
 import { createApp } from '@infra/app';
 import apiAuthUrl from '@api/const/api-url';
-import { TaskModel } from '@domain/tasks/model';
+import { TaskModel, type TTaskCreateDto } from '@domain/tasks/model';
 import { getBasicAuthHeader } from 'tests/helpers/get-basic-auth-header';
-import { TEST_VAR } from 'tests/helpers/const';
+import { TASK_API_TITLES, TEST_VAR } from 'tests/helpers/const';
 import { UserModel } from '@domain/users/model';
+import { TaskStatusLogModel } from '@domain/tasks/inner-entities/task-status-log/model';
+import { logger } from '@logger/index';
 
 const { email, password } = TEST_VAR.userAdmin;
 
 describe('Task API', () => {
   const app = createApp();
   // CREATE
-  it('Should create a task', async () => {
+  it(TASK_API_TITLES.itCreateTask, async () => {
+    const taskStatusRes = await request(app)
+      .post(apiAuthUrl.taskStatusDic)
+      .set('Authorization', getBasicAuthHeader(email, password))
+      .send(TEST_VAR.taskStatusMutationDto);
+
     const res = await request(app)
       .post(apiAuthUrl.task)
       .set('Authorization', getBasicAuthHeader(email, password))
-      .send({ description: 'New Task', isCompleted: false });
+      .send({
+        description: TASK_API_TITLES.nameTask,
+        completed: false,
+        taskStatusEventId: taskStatusRes.body._id,
+        comment: TASK_API_TITLES.itCreateTask,
+      } satisfies TTaskCreateDto);
+
+    logger.info(res.body, TASK_API_TITLES.itCreateTask);
 
     expect(res.status).to.equal(201);
-    expect(res.body.description).to.equal('New Task');
+    expect(res.body.description).to.equal(TASK_API_TITLES.nameTask);
+
+    expect(res.body.taskStatusEventId).to.be.an('object');
+    expect(res.body.taskStatusEventId.taskStatusId).to.be.an('object');
+    expect(res.body.taskStatusEventId.createBy).to.be.an('object');
+
+    const eventInDb = await TaskStatusLogModel.findById(res.body.taskStatusEventId._id);
+    expect(eventInDb).to.not.be.null;
   });
 
   // READ (all)
-  it('Should get all tasks', async () => {
+  it(TASK_API_TITLES.itGetTasks, async () => {
     const admin = await UserModel.findOne({ email: TEST_VAR.userAdmin.email }).lean();
     await TaskModel.create({ description: 'Task 1', createBy: admin?._id });
     await TaskModel.create({ description: 'Task 2', createBy: admin?._id });

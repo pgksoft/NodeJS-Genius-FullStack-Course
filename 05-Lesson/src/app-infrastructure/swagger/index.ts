@@ -2,9 +2,11 @@ import type { OpenAPIV3 } from 'openapi-types';
 import type { Options } from 'swagger-jsdoc';
 import swaggerJSDoc from 'swagger-jsdoc';
 import '@sys/@types/swagger-jsdoc';
-import { openApiTaskSchemas } from '@src/api-docs/v1/schemas/task';
-import { openApiUserSchemas } from '@src/api-docs/v1/schemas/user';
-import { openApiMediaLibrarySchemas } from '@src/api-docs/v1/schemas/media-library';
+import { openApiTaskSchemas } from '@api/api-docs/v1/schemas/tasks/task';
+import { openApiUserSchemas } from '@api/api-docs/v1/schemas/user';
+import { openApiMediaLibrarySchemas } from '@api/api-docs/v1/schemas/media-library';
+import { openApiTaskStatusDicSchemas } from '@api/api-docs/v1/schemas/tasks/task-status-dic';
+import { openApiTaskStatusLogSchemas } from '@api/api-docs/v1/schemas/tasks/task-status-log';
 
 const optionsV1: Options = {
   definition: {
@@ -17,7 +19,13 @@ const optionsV1: Options = {
     paths: {},
     components: {
       securitySchemes: { basicAuth: { type: 'http', scheme: 'basic' } },
-      schemas: { ...openApiTaskSchemas, ...openApiUserSchemas, ...openApiMediaLibrarySchemas },
+      schemas: {
+        ...openApiTaskSchemas,
+        ...openApiTaskStatusDicSchemas,
+        ...openApiTaskStatusLogSchemas,
+        ...openApiUserSchemas,
+        ...openApiMediaLibrarySchemas,
+      },
     },
     security: [
       {

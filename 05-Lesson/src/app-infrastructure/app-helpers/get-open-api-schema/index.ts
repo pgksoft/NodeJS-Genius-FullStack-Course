@@ -3,6 +3,7 @@ import type { TFieldsSchema } from '@infra/app-type-helpers/t-fields-schema';
 import type { TSchemaSelection } from '@infra/app-type-helpers/t-schema-selection';
 import type { SchemaTypeOptions } from 'mongoose';
 import type { OpenAPIV3 } from 'openapi-types';
+import type TUnknownRecord from '@infra/app-type-helpers/t-unknown-record';
 
 export const getOpenApiSchema = <
   T extends object,
@@ -254,7 +255,9 @@ const mapPrimitiveFieldToOpenApi = (field: TOpenApiField): OpenAPIV3.SchemaObjec
 };
 
 const extractLength = (
-  value: SchemaTypeOptions<any>['maxLength'] | SchemaTypeOptions<any>['minLength'],
+  value:
+    | SchemaTypeOptions<TUnknownRecord>['maxLength']
+    | SchemaTypeOptions<TUnknownRecord>['minLength'],
 ): number | undefined => {
   if (!value) return undefined;
   if (typeof value === 'number') return value;

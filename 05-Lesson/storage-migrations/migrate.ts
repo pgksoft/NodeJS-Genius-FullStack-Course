@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { logger } from './logger';
 import { MigrationState } from './state';
 import { registry } from './registry';

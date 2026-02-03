@@ -1,0 +1,20 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": ["src/server.ts"],
+  "project": ["src/**/*.ts"],
+  "ignore": ["dist/**", "dist-tests/**", "storage-migrations/**"],
+  "ignoreDependencies": ["ts-node", "ts-node-dev", "tsx", "pino-pretty", "mongodb-memory-server"],
+  "paths": {
+    "@api/*": ["src/app-infrastructure/api/*"],
+    "@access/*": ["src/app-infrastructure/access/*"],
+    "@helpers/*": ["src/app-infrastructure/app-helpers/*"],
+    "@sys/*": ["src/app-infrastructure/app-sys/*"],
+    "@middleware/*": ["src/app-infrastructure/middleware/*"],
+    "@logger/*": ["src/app-infrastructure/logger/*"],
+    "@serialization/*": ["src/app-infrastructure/serialization/*"],
+    "@infra/*": ["src/app-infrastructure/*"],
+    "@db/*": ["src/db/*"],
+    "@domain/*": ["src/domain/*"],
+    "@src/*": ["src/*"]
+  }
+}
