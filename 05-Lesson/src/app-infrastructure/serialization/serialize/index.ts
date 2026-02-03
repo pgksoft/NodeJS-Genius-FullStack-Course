@@ -8,7 +8,7 @@ const rulesCache = new WeakMap<object, TNormalizedRules>();
 const emptyRules: TSerializationRules = {};
 
 const normalizeRules = (rules: TSerializationRules): TNormalizedRules => {
-  // здесь в будущем можно делать валидацию, нормализацию и т.п.
+  // Validation, normalization, etc. can be done here in the future.
   return rules;
 };
 
@@ -42,21 +42,21 @@ const innerSerializeEntity = <TDb, TApi>(entity: TDb, rules: TSerializationRules
     // rename
     const targetKey = rule?.kind === 'rename' ? rule.to : key;
 
-    // date (явное правило или фактический тип)
+    // date (explicit rule or actual type)
     if (rule?.kind === 'date' || value instanceof Date) {
       const asDate = value as Date | null | undefined;
       result[targetKey] = asDate?.toISOString?.() ?? null;
       continue;
     }
 
-    // objectId (явное правило или фактический тип)
+    // objectId (explicit rule or actual type)
     if (rule?.kind === 'objectId' || value instanceof Types.ObjectId) {
       const asObjectId = value as Types.ObjectId | null | undefined;
       result[targetKey] = asObjectId?.toString?.() ?? null;
       continue;
     }
 
-    // entityOf — вложенная сущность
+    // entityOf — nested entity
     if (rule?.kind === 'entityOf') {
       result[targetKey] = innerSerializeEntity<unknown, unknown>(value, rule.rules ?? emptyRules);
       continue;
@@ -75,7 +75,7 @@ const innerSerializeEntity = <TDb, TApi>(entity: TDb, rules: TSerializationRules
       continue;
     }
 
-    // nested object без явного entityOf, но с rules внутри
+    // nested object without explicit entityOf, but with rules inside
     if (value !== null && typeof value === 'object') {
       const nestedRules = getNestedRules(rule);
 
@@ -83,7 +83,7 @@ const innerSerializeEntity = <TDb, TApi>(entity: TDb, rules: TSerializationRules
       continue;
     }
 
-    // примитив без спец. правил
+    // primitive without special rules
     result[targetKey] = value;
   }
 

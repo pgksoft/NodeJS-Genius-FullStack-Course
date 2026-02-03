@@ -154,7 +154,7 @@ const mapArrayFieldToOpenApi = (
 
   const itemField: TOpenApiField = {
     ...field,
-    // для items нам важен только type, остальное (enum, max/min, openApi) пусть указывают на уровне элемента
+    // for items we only care about the type, the rest (enum, max/min, openApi) should be specified at the element level
     type: itemType,
   };
 
@@ -220,7 +220,7 @@ const mapPrimitiveFieldToOpenApi = (field: TOpenApiField): OpenAPIV3.SchemaObjec
     openApiType = 'string';
     format = 'objectId';
   } else {
-    // по умолчанию — string (String, undefined, прочие конструкторы)
+    // default - string (String, undefined, other constructors)
     openApiType = 'string';
   }
 

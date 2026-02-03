@@ -1,12 +1,14 @@
 import type { Types as MongooseTypes } from 'mongoose';
 import type { RuleFor, RulesFor, TSerializeEntityOfRule } from '../dsl-types';
 
+//! Waiting for debugging - It doesn't work as intended yet
+
 type TObjectIdLike = MongooseTypes.ObjectId;
 
-// Преобразование примитивов по умолчанию (без явных правил)
+// Default primitive transformation (no explicit rules)
 type TDefaultTransform<T> = T extends Date ? string : T extends TObjectIdLike ? string : T;
 
-// Применение одного правила к типу поля
+// Applying one rule to a field type
 type TApplyRule<TValue, TRule extends RuleFor<TValue>> = TRule['kind'] extends 'exclude'
   ? never
   : TRule['kind'] extends 'date'
@@ -29,21 +31,21 @@ type TApplyRule<TValue, TRule extends RuleFor<TValue>> = TRule['kind'] extends '
               : TValue
             : TDefaultTransform<TValue>;
 
-// Вспомогательный тип: правило для конкретного поля, очищенное от undefined
+// Helper type: A rule for a specific field, cleared of undefined
 type TRuleForField<TDb, TRules extends RulesFor<TDb>, K extends keyof TDb> = Extract<
   TRules[K],
   RuleFor<TDb[K]>
 >;
 
-// Основной тип сериализации: TDb + TRules → TApi
+// Basic serialization type: TDb + TRules → TApi
 export type TSerializeType<TDb, TRules extends RulesFor<TDb>> = {
-  // Ключи:
-  // - если для поля есть правило kind: 'exclude' → выкидываем ключ
-  // - если есть правило kind: 'rename' → используем новое имя
-  // - иначе → оригинальное имя
-  // Значения:
-  // - если есть подходящее правило → применяем его
-  // - иначе → дефолтное преобразование (Date/ObjectId → string)
+  // Keys:
+  // - if there is a kind rule for a field: 'exclude' → throw away the key
+  // - If there is a rule kind: 'rename' → use the new name
+  // - otherwise → original name
+  // Values:
+  // - If there is a suitable rule, we apply it.
+  // - otherwise → default transformation (Date/ObjectId → string)
   [K in keyof TDb as Extract<TRules[K], { kind: 'exclude' }> extends never
     ? Extract<TRules[K], { kind: 'rename'; to: string }> extends { to: infer New extends string }
       ? New

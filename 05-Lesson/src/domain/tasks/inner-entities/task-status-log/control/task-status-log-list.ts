@@ -14,10 +14,6 @@ import {
   taskStatusLogPopulateConfig,
   taskStatusLogSerializationRules,
 } from '../const/log-serialization-rules';
-// import {
-//   getTaskStatusLogPopulateConfig,
-//   taskStatusLogSerializationRules,
-// } from '../const/serialization&populate-config';
 
 // for log
 export async function taskStatusLogList(
